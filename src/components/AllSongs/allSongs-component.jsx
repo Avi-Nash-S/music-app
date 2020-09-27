@@ -13,9 +13,20 @@ const AllSongs = ({ history, songs, getSongs }) => {
     setAllSongs(songs);
   }, [songs]);
 
+  const filterSongs = (query) => {
+    const filteredSongs = songs.filter((song) =>
+      song.title.includes(query || "")
+    );
+    setAllSongs(filteredSongs);
+  };
+
   return (
     <>
       <div onClick={() => history.push("/playlists")}>All Songs</div>
+      <input
+        placeholder="Search..."
+        onChange={(e) => filterSongs(e.target.value)}
+      />
       <div>
         <ul>
           {allSongs.map((song, index) => (
