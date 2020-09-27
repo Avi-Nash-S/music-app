@@ -20,7 +20,7 @@ export const debounceFunc = (func, delay) => {
 algorithm from: https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm */
 
 export const shuffleArray = (array) => {
-    let tempArr = array;
+    let tempArr = array || [];
     for (var i = tempArr.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = tempArr[i];

@@ -46,7 +46,9 @@ function PlaylistDetails({
   }, [match.params.id, getPlaylist]);
 
   useEffect(() => {
-    setSongsList(playlist);
+    const temp = playlist ? playlist.playlistSongs : [];
+    const sortedList = temp.sort((a, b) => a.addedAt - b.addedAt);
+    setSongsList({ ...playlist, playlistSongs: sortedList });
   }, [playlist]);
 
   const localShuffle = (songslist) => {

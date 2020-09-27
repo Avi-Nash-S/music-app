@@ -39,7 +39,6 @@ export const addPlaylist = (name) => {
 export const getPlaylist = (id) => {
     return (dispatch, getState) => {
         const storeState = getState();
-        console.log(storeState);
         const playlists = storeState.playlists.playlists;
         const selectedPlaylist = playlists && playlists.find((playlist) => playlist.id === Number(id));
         dispatch(getPlaylistSucess(selectedPlaylist));
@@ -47,6 +46,7 @@ export const getPlaylist = (id) => {
 }
 
 export const addSongsToPlaylist = (song) => {
+    const time = Date.now();
     return (dispatch, getState) => {
         const storeState = getState();
         const playlists = storeState.playlists.playlists;
@@ -54,20 +54,20 @@ export const addSongsToPlaylist = (song) => {
         const selectedPlaylistSongs = storeState.playlists.selectedPlaylist ? [...storeState.playlists.selectedPlaylist.playlistSongs] : [];
         const findSongIndex = selectedPlaylistSongs.findIndex((value) => value.id === song.id);
         if (findSongIndex === -1) {
-            selectedPlaylistSongs.push(song);
+            const dateAdded = { ...song, addedAt: time }
+            selectedPlaylistSongs.push(dateAdded);
             const selectedSongs = selectedPlaylist && { ...selectedPlaylist, playlistSongs: selectedPlaylistSongs };
             const findPlaylistIndex = playlists.findIndex((value) => value.id === selectedSongs.id);
-            console.log('findPlaylistIndex', findPlaylistIndex)
             if (findPlaylistIndex !== -1) {
                 playlists[findPlaylistIndex] = selectedSongs;
                 dispatch(updatePlaylists(playlists));
             }
             dispatch(getPlaylistSucess(selectedSongs));
         } else {
-            selectedPlaylistSongs[findSongIndex] = song
+            const dateAdded = { ...song, addedAt: time };
+            selectedPlaylistSongs[findSongIndex] = dateAdded;
             const selectedSongs = selectedPlaylist && { ...selectedPlaylist, playlistSongs: selectedPlaylistSongs };
             const findPlaylistIndex = playlists.findIndex((value) => value.id === selectedSongs.id);
-            console.log('findPlaylistIndex', findPlaylistIndex)
             if (findPlaylistIndex !== -1) {
                 playlists[findPlaylistIndex] = selectedSongs;
                 dispatch(updatePlaylists(playlists))
