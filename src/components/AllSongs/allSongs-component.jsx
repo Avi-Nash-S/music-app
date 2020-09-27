@@ -1,15 +1,39 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { getSongs } from "../../store/songs/songs.action";
 
-const AllSongs = ({ history }) => {
+const AllSongs = ({ history, songs, getSongs }) => {
+  const [allSongs, setAllSongs] = useState([]);
+
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/photos")
-      .then((response) => console.log("Data :", response.data))
-      .catch((err) => console.log("Error :", err));
-  }, []);
+    getSongs();
+  }, [getSongs]);
 
-  return <div onClick={() => history.push("/playlists")}>All Songs</div>;
+  useEffect(() => {
+    setAllSongs(songs);
+  }, [songs]);
+
+  return (
+    <>
+      <div onClick={() => history.push("/playlists")}>All Songs</div>
+      <div>
+        <ul>
+          {allSongs.map((song, index) => (
+            <li key={index}>{song.url}</li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
 };
 
-export default AllSongs;
+const mapStateToProps = (storeState) => ({
+  songs: storeState.songs.songs,
+  loading: storeState.songs.pending,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getSongs: () => dispatch(getSongs()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllSongs);
