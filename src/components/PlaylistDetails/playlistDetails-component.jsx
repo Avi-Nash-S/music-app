@@ -6,7 +6,7 @@ import {
   removeSongsFromPlaylist,
 } from "../../store/playlists/playlists.action";
 import { getSongs } from "../../store/songs/songs.action";
-import { debounceFunc } from "../../utils/helper";
+import { debounceFunc, shuffleArray } from "../../utils/helper";
 
 function PlaylistDetails({
   match,
@@ -18,7 +18,7 @@ function PlaylistDetails({
   songs,
   getSongs,
 }) {
-  const [songsList, setSongsList] = useState([]);
+  const [songsList, setSongsList] = useState(null);
   const [toggleSearch, setToggleSearch] = useState(false);
   const [allSongs, setAllSongs] = useState([]);
 
@@ -44,6 +44,16 @@ function PlaylistDetails({
   useEffect(() => {
     getPlaylist(match.params.id);
   }, [match.params.id, getPlaylist]);
+
+  useEffect(() => {
+    setSongsList(playlist);
+  }, [playlist]);
+
+  const localShuffle = (songslist) => {
+    const temp = songsList.playlistSongs;
+    const shuffledList = shuffleArray(temp);
+    return { ...songslist, playlistSongs: shuffledList };
+  };
   return (
     <>
       <div onClick={() => history.push("/playlists")}>
@@ -52,11 +62,16 @@ function PlaylistDetails({
       <button onClick={() => setToggleSearch((prevState) => !prevState)}>
         Toggle
       </button>
+      <button
+        onClick={() => setSongsList((prevState) => localShuffle(prevState))}
+      >
+        Shuffle
+      </button>
       {!toggleSearch ? (
         <>
-          <>{playlist ? playlist.id : ""}</>
-          {playlist && playlist.playlistSongs ? (
-            playlist.playlistSongs.map((selectedSong, index) => (
+          <>{songsList ? songsList.id : ""}</>
+          {songsList && songsList.playlistSongs ? (
+            songsList.playlistSongs.map((selectedSong, index) => (
               <ul key={index}>
                 <li
                   id={selectedSong.id}
