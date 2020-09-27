@@ -1,0 +1,5 @@
+export const PlaylistsActionTypes = {
+    ADD_PLAYLIST: 'ADD_PLAYLIST',
+    GET_PLAYLIST: 'GET_PLAYLIST',
+    UPDATE_PLAYLIST: 'UPDATE_PLAYLIST'
+};

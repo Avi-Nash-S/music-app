@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getSongs } from "../../store/songs/songs.action";
+import { debounceFunc } from "../../utils/helper";
 
 const AllSongs = ({ history, songs, getSongs }) => {
   const [allSongs, setAllSongs] = useState([]);
@@ -13,19 +14,24 @@ const AllSongs = ({ history, songs, getSongs }) => {
     setAllSongs(songs);
   }, [songs]);
 
-  const filterSongs = (query) => {
-    const filteredSongs = songs.filter((song) =>
-      song.title.includes(query || "")
-    );
+  const filterSongs = (value) => {
+    const query = value ? value.toLowerCase() : "";
+    const filteredSongs = songs.filter((song) => {
+      const title = song && song.title ? song.title.toLowerCase() : "";
+      return title.includes(query);
+    });
     setAllSongs(filteredSongs);
   };
+
+  const onSearch = debounceFunc(filterSongs, 500);
 
   return (
     <>
       <div onClick={() => history.push("/playlists")}>All Songs</div>
       <input
         placeholder="Search..."
-        onChange={(e) => filterSongs(e.target.value)}
+        onChange={(e) => onSearch(e.target.value)}
+        disabled={songs && !songs.length}
       />
       <div>
         <ul>

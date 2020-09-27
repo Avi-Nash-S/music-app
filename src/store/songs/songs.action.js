@@ -22,12 +22,10 @@ export const getSongs = () => {
     return dispatch => {
         const requestUrl = `${endPoint}`;
         dispatch(getSongsRequest())
-        setTimeout(() => {
-            axios.get(requestUrl).then(response => {
-                dispatch(getSongsSuccess(response))
-            }, err => {
-                dispatch(getSongsFailure(err))
-            })
-        }, 2000)
+        axios.get(requestUrl).then(response => {
+            dispatch(getSongsSuccess(response))
+        }, err => {
+            dispatch(getSongsFailure(err))
+        })
     }
 };
