@@ -1,26 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Switch>
+      <Route exact path='/songs' component={TestOne} />
+      <Route exact path={`/playlist`} component={TestTwo} />
+      <Redirect from='*' to='/songs' />
+    </Switch>
   );
 }
 
-export default App;
+const TestOne = ({ history }) => <div onClick={() => history.push('/playlist')}>All Songs</div>
+const TestTwo = ({ history }) => <div onClick={() => history.push('/songs')}>PlayList</div>
+
+export default withRouter(App);
