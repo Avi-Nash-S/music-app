@@ -12,6 +12,7 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Zoom from "@material-ui/core/Zoom";
 import Play from "../../static/play.svg";
 import { useHistory } from "react-router-dom";
+import { useWindowSize } from "@react-hook/window-size";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,6 +57,8 @@ ScrollTop.propTypes = {
 
 export default function Header(props) {
   const history = useHistory();
+  const [width] = useWindowSize();
+  const breakPoint = width > 500;
   return (
     <React.Fragment>
       <CssBaseline />
@@ -76,12 +79,14 @@ export default function Header(props) {
               style={{ height: "30px", width: "30px" }}
               alt="Play"
             />
-            <Typography
-              variant="h7"
-              style={{ fontFamily: "cursive", marginLeft: "5px" }}
-            >
-              MusicApp
-            </Typography>
+            {breakPoint && (
+              <Typography
+                variant="h7"
+                style={{ marginLeft: "10px", fontSize: "large" }}
+              >
+                MusicApp
+              </Typography>
+            )}
           </span>
         </Toolbar>
       </AppBar>

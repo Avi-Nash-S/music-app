@@ -10,6 +10,7 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { useWindowSize } from "@react-hook/window-size";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +49,8 @@ export default function MediaControlCard({
   song,
   type = false,
 }) {
+  const [width] = useWindowSize();
+  const breakPoint = width > 500;
   const classes = useStyles();
   const theme = useTheme();
   const MAPPER_TYPE = {
@@ -98,31 +101,33 @@ export default function MediaControlCard({
           </IconButton>
         </div>
       </div>
-      <div
-        style={{
-          boxSizing: "initial",
-          display: "flex",
-          alignSelf: "center",
-          marginRight: "10px",
-        }}
-      >
-        {!type ? (
-          <img
-            style={{
-              height: "150px",
-              width: "150px",
-              borderRadius: "5px",
-              boxShadow: "2px 2px 8px 0px #00000070",
-            }}
-            src={`${media}`}
-            alt="Img"
-          />
-        ) : (
-          <span style={{ padding: "20px", cursor: "pointer" }}>
-            {MAPPER_TYPE[type]}
-          </span>
-        )}
-      </div>
+      {breakPoint && (
+        <div
+          style={{
+            boxSizing: "initial",
+            display: "flex",
+            alignSelf: "center",
+            marginRight: "10px",
+          }}
+        >
+          {!type ? (
+            <img
+              style={{
+                height: "150px",
+                width: "150px",
+                borderRadius: "5px",
+                boxShadow: "2px 2px 8px 0px #00000070",
+              }}
+              src={`${media}`}
+              alt="Img"
+            />
+          ) : (
+            <span style={{ padding: "20px", cursor: "pointer" }}>
+              {MAPPER_TYPE[type]}
+            </span>
+          )}
+        </div>
+      )}
     </Card>
   );
 }

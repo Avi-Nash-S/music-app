@@ -18,14 +18,15 @@ const AllSongs = ({ songs, getSongs }) => {
       setHasMore(false);
       return;
     }
+    // Mock Loading...
     setTimeout(() => {
       setCurrent(
-        current.concat(allSongs.slice(count.prev + 10, count.next + 10))
+        current.concat(allSongs.slice(count.prev + 100, count.next + 100))
       );
-    }, 2000);
+    }, 1000);
     setCount((prevState) => ({
-      prev: prevState.prev + 10,
-      next: prevState.next + 10,
+      prev: prevState.prev + 100,
+      next: prevState.next + 100,
     }));
   };
 
@@ -40,10 +41,10 @@ const AllSongs = ({ songs, getSongs }) => {
   useEffect(() => {
     setCount({
       prev: 0,
-      next: 10,
+      next: 100,
     });
     setHasMore(true);
-    setCurrent(allSongs.slice(0, 10));
+    setCurrent(allSongs.slice(0, 100));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSongs]);
 
@@ -60,7 +61,7 @@ const AllSongs = ({ songs, getSongs }) => {
 
   return (
     <>
-      <div style={{ fontSize: "larger" }}>All Songs</div>
+      <div style={{ fontSize: "large", marginTop: "10px" }}>All Songs</div>
       <Input
         style={{ width: "100%" }}
         id="input-with-icon-adornment"

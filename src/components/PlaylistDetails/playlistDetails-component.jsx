@@ -37,24 +37,25 @@ function PlaylistDetails({
       setHasMore(false);
       return;
     }
+    // Mock Loading...
     setTimeout(() => {
       setCurrent(
-        current.concat(allSongs.slice(count.prev + 10, count.next + 10))
+        current.concat(allSongs.slice(count.prev + 100, count.next + 100))
       );
-    }, 2000);
+    }, 1000);
     setCount((prevState) => ({
-      prev: prevState.prev + 10,
-      next: prevState.next + 10,
+      prev: prevState.prev + 100,
+      next: prevState.next + 100,
     }));
   };
 
   useEffect(() => {
     setCount({
       prev: 0,
-      next: 10,
+      next: 100,
     });
     setHasMore(true);
-    setCurrent(allSongs.slice(0, 10));
+    setCurrent(allSongs.slice(0, 100));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSongs]);
 
@@ -63,7 +64,7 @@ function PlaylistDetails({
   }, [getSongs]);
 
   useEffect(() => {
-    setAllSongs(songs.slice(0, 100));
+    setAllSongs(songs);
   }, [songs]);
 
   const filterSongs = (value) => {
@@ -72,7 +73,7 @@ function PlaylistDetails({
       const title = song && song.title ? song.title.toLowerCase() : "";
       return title.includes(query);
     });
-    setAllSongs(filteredSongs.slice(0, 100));
+    setAllSongs(filteredSongs);
   };
 
   const onSearch = debounceFunc(filterSongs, 500);
@@ -98,7 +99,9 @@ function PlaylistDetails({
   };
   return (
     <>
-      <div style={{ fontSize: "larger" }}>PlayList Details</div>
+      <div style={{ fontSize: "large", marginTop: "10px" }}>
+        PlayList Details
+      </div>
       <Button
         style={{ float: "right" }}
         onClick={() => setToggleSearch((prevState) => !prevState)}

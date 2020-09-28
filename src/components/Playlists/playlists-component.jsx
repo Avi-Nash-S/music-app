@@ -16,7 +16,7 @@ const PlayLists = ({ history, match, playlists, addPlaylist }) => {
   }, [playlists, setDisplayPlaylist]);
   return (
     <>
-      <div style={{ fontSize: "larger" }}>PlayLists</div>
+      <div style={{ fontSize: "large", marginTop: "10px" }}>PlayLists</div>
       <div
         style={{
           display: "flex",

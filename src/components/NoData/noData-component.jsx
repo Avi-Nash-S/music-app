@@ -16,7 +16,7 @@ function NoData({ placeHolder }) {
         style={{ height: "150px", width: "150px" }}
         alt="No Playlist Found"
       />
-      <div style={{ marginTop: "10px" }}>{placeHolder}</div>
+      <div style={{ marginTop: "10px", width: "135px" }}>{placeHolder}</div>
     </div>
   );
 }
