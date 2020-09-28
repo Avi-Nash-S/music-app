@@ -101,33 +101,35 @@ export default function MediaControlCard({
           </IconButton>
         </div>
       </div>
-      {breakPoint && (
-        <div
-          style={{
-            boxSizing: "initial",
-            display: "flex",
-            alignSelf: "center",
-            marginRight: "10px",
-          }}
-        >
-          {!type ? (
-            <img
-              style={{
-                height: "150px",
-                width: "150px",
-                borderRadius: "5px",
-                boxShadow: "2px 2px 8px 0px #00000070",
-              }}
-              src={`${media}`}
-              alt="Img"
-            />
-          ) : (
-            <span style={{ padding: "20px", cursor: "pointer" }}>
-              {MAPPER_TYPE[type]}
-            </span>
-          )}
-        </div>
-      )}
+      <div
+        style={{
+          boxSizing: "initial",
+          display: "flex",
+          alignSelf: "center",
+          marginRight: "10px",
+        }}
+      >
+        {!type ? (
+          <>
+            {breakPoint && (
+              <img
+                style={{
+                  height: "150px",
+                  width: "150px",
+                  borderRadius: "5px",
+                  boxShadow: "2px 2px 8px 0px #00000070",
+                }}
+                src={`${media}`}
+                alt="Img"
+              />
+            )}
+          </>
+        ) : (
+          <span style={{ padding: "20px", cursor: "pointer" }}>
+            {MAPPER_TYPE[type]}
+          </span>
+        )}
+      </div>
     </Card>
   );
 }
