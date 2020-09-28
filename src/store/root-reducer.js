@@ -7,7 +7,7 @@ import songsReducer from './songs/songs.reducer';
 const persistConfig = {
     key: 'root',
     storage,
-    blacklist: ['songs', 'playlists'],
+    blacklist: ['songs'],
 };
 
 const rootReducer = combineReducers({
