@@ -48,6 +48,7 @@ const AllSongs = ({ songs, getSongs }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSongs]);
 
+  // Filter songs on search query
   const filterSongs = (value) => {
     const query = value ? value.toLowerCase() : "";
     const filteredSongs = songs.filter((song) => {
