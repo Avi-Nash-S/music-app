@@ -18,12 +18,12 @@ const AllSongs = ({ songs, getSongs }) => {
       setHasMore(false);
       return;
     }
-    // Mock Loading...
-    setTimeout(() => {
-      setCurrent(
-        current.concat(allSongs.slice(count.prev + 100, count.next + 100))
-      );
-    }, 1000);
+
+
+    setCurrent(
+      current.concat(allSongs.slice(count.prev + 100, count.next + 100))
+    );
+
     setCount((prevState) => ({
       prev: prevState.prev + 100,
       next: prevState.next + 100,
