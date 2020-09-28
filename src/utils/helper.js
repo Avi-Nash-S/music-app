@@ -29,3 +29,13 @@ export const shuffleArray = (array) => {
     }
     return tempArr;
 }
+
+export const calculateRowHeight = (width, height) => {
+    if (width < 1000 && width > 700) {
+        return (height - 218) / (3 * width * 0.00101);
+    } else if (width < 700) {
+        return (height - 218) / (3 * width * 0.0012);
+    } else {
+        return (height - 218) / Math.min(3 * width * 0.0009, 3);
+    }
+};

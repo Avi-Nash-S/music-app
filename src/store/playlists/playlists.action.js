@@ -28,7 +28,7 @@ export const addPlaylist = (name) => {
         const playlist = {
             id: id,
             name: name || 'No Name',
-            createdAt: date.toLocaleTimeString(),
+            createdAt: date.toLocaleString(),
             playlistSongs: [],
         };
         dispatch(addPlaylistsRequest());

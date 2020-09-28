@@ -1,7 +1,13 @@
 import React from "react";
+import { Container } from "@material-ui/core";
+import Header from "../Header/header-component";
 
 const AppLayout = ({ children }) => {
-  return <div className="app__layout">{children}</div>;
+  return (
+    <Container className="app__layout">
+      <Header>{children}</Header>
+    </Container>
+  );
 };
 
 export default AppLayout;

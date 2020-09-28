@@ -7,27 +7,63 @@ import {
 } from "../../store/playlists/playlists.action";
 import { getSongs } from "../../store/songs/songs.action";
 import { debounceFunc, shuffleArray } from "../../utils/helper";
+import MediaControlCard from "../SongCard/songCard-component";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SearchIcon from "@material-ui/icons/Search";
+import Button from "@material-ui/core/Button";
+import InfiniteScroll from "react-infinite-scroll-component";
+import NoData from "../NoData/noData-component";
 
 function PlaylistDetails({
   match,
   getPlaylist,
-  playlist,
-  history,
+  selectedPlaylist,
   addSongsToPlaylist,
   removeSongsFromPlaylist,
   songs,
   getSongs,
+  history,
+  playlists,
 }) {
   const [songsList, setSongsList] = useState(null);
   const [toggleSearch, setToggleSearch] = useState(false);
   const [allSongs, setAllSongs] = useState([]);
+  const [count, setCount] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [current, setCurrent] = useState([]);
+  const getMoreData = () => {
+    if (current.length === allSongs.length) {
+      setHasMore(false);
+      return;
+    }
+    setTimeout(() => {
+      setCurrent(
+        current.concat(allSongs.slice(count.prev + 10, count.next + 10))
+      );
+    }, 2000);
+    setCount((prevState) => ({
+      prev: prevState.prev + 10,
+      next: prevState.next + 10,
+    }));
+  };
+
+  useEffect(() => {
+    setCount({
+      prev: 0,
+      next: 10,
+    });
+    setHasMore(true);
+    setCurrent(allSongs.slice(0, 10));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allSongs]);
 
   useEffect(() => {
     getSongs();
   }, [getSongs]);
 
   useEffect(() => {
-    setAllSongs(songs);
+    setAllSongs(songs.slice(0, 100));
   }, [songs]);
 
   const filterSongs = (value) => {
@@ -36,20 +72,24 @@ function PlaylistDetails({
       const title = song && song.title ? song.title.toLowerCase() : "";
       return title.includes(query);
     });
-    setAllSongs(filteredSongs);
+    setAllSongs(filteredSongs.slice(0, 100));
   };
 
   const onSearch = debounceFunc(filterSongs, 500);
 
   useEffect(() => {
-    getPlaylist(match.params.id);
-  }, [match.params.id, getPlaylist]);
+    if (playlists && playlists.length > 0) {
+      getPlaylist(match.params.id);
+    } else {
+      history.replace("/playlists");
+    }
+  }, [match.params.id, getPlaylist, playlists, history]);
 
   useEffect(() => {
-    const temp = playlist ? playlist.playlistSongs : [];
+    const temp = selectedPlaylist ? selectedPlaylist.playlistSongs : [];
     const sortedList = temp.sort((a, b) => a.addedAt - b.addedAt);
-    setSongsList({ ...playlist, playlistSongs: sortedList });
-  }, [playlist]);
+    setSongsList({ ...selectedPlaylist, playlistSongs: sortedList });
+  }, [selectedPlaylist]);
 
   const localShuffle = (songslist) => {
     const temp = songsList.playlistSongs;
@@ -58,50 +98,78 @@ function PlaylistDetails({
   };
   return (
     <>
-      <div onClick={() => history.push("/playlists")}>
-        PlayList Details of {match.params.id}
-      </div>
-      <button onClick={() => setToggleSearch((prevState) => !prevState)}>
-        Toggle
-      </button>
-      <button
-        onClick={() => setSongsList((prevState) => localShuffle(prevState))}
+      <div style={{ fontSize: "larger" }}>PlayList Details</div>
+      <Button
+        style={{ float: "right" }}
+        onClick={() => setToggleSearch((prevState) => !prevState)}
       >
-        Shuffle
-      </button>
+        {toggleSearch ? "Back" : "Add Songs"}
+      </Button>
       {!toggleSearch ? (
         <>
-          <>{songsList ? songsList.id : ""}</>
-          {songsList && songsList.playlistSongs ? (
+          <Button
+            style={{ float: "right" }}
+            onClick={() => history.push("/playlists")}
+          >
+            {"Back"}
+          </Button>
+          <Button
+            style={{ float: "right" }}
+            onClick={() => setSongsList((prevState) => localShuffle(prevState))}
+          >
+            Shuffle
+          </Button>
+          <div style={{ clear: "both" }} />
+          {songsList &&
+          songsList.playlistSongs &&
+          songsList.playlistSongs.length > 0 ? (
             songsList.playlistSongs.map((selectedSong, index) => (
-              <ul key={index}>
-                <li
-                  id={selectedSong.id}
-                  onClick={(e) => removeSongsFromPlaylist(e.target.id)}
-                >
-                  {selectedSong ? selectedSong.title : ""}
-                </li>
-              </ul>
+              <MediaControlCard
+                key={index}
+                title={selectedSong.title}
+                deleteSong={removeSongsFromPlaylist}
+                song={selectedSong.id}
+                type={"remove"}
+              />
             ))
           ) : (
-            <></>
+            <NoData placeHolder={"Add Songs to Enjoy!"} />
           )}
         </>
       ) : (
         <>
-          <input
+          <Input
+            style={{ width: "100%" }}
+            id="input-with-icon-adornment"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
             placeholder="Search..."
             onChange={(e) => onSearch(e.target.value)}
             disabled={songs && !songs.length}
           />
           <div>
-            <ul>
-              {allSongs.map((song, index) => (
-                <li key={index} onClick={() => addSongsToPlaylist(song)}>
-                  {song.url}
-                </li>
-              ))}
-            </ul>
+            <InfiniteScroll
+              dataLength={current.length}
+              next={getMoreData}
+              hasMore={hasMore}
+              loader={<h4>Loading...</h4>}
+            >
+              <div>
+                {current &&
+                  current.map((song, index) => (
+                    <MediaControlCard
+                      key={index}
+                      title={song.title}
+                      addSong={addSongsToPlaylist}
+                      song={song}
+                      type={"add"}
+                    />
+                  ))}
+              </div>
+            </InfiniteScroll>
           </div>
         </>
       )}
@@ -110,7 +178,8 @@ function PlaylistDetails({
 }
 
 const mapStateToProps = (storeState) => ({
-  playlist: storeState.playlists.selectedPlaylist,
+  playlists: storeState.playlists.playlists,
+  selectedPlaylist: storeState.playlists.selectedPlaylist,
   songs: storeState.songs.songs,
   loading: storeState.playlists.pending,
 });
