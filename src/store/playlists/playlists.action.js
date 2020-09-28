@@ -53,27 +53,19 @@ export const addSongsToPlaylist = (song) => {
         const selectedPlaylist = storeState.playlists.selectedPlaylist;
         const selectedPlaylistSongs = storeState.playlists.selectedPlaylist ? [...storeState.playlists.selectedPlaylist.playlistSongs] : [];
         const findSongIndex = selectedPlaylistSongs.findIndex((value) => value.id === song.id);
+        const dateAdded = { ...song, addedAt: time }
         if (findSongIndex === -1) {
-            const dateAdded = { ...song, addedAt: time }
             selectedPlaylistSongs.push(dateAdded);
-            const selectedSongs = selectedPlaylist && { ...selectedPlaylist, playlistSongs: selectedPlaylistSongs };
-            const findPlaylistIndex = playlists.findIndex((value) => value.id === selectedSongs.id);
-            if (findPlaylistIndex !== -1) {
-                playlists[findPlaylistIndex] = selectedSongs;
-                dispatch(updatePlaylists(playlists));
-            }
-            dispatch(getPlaylistSucess(selectedSongs));
         } else {
-            const dateAdded = { ...song, addedAt: time };
             selectedPlaylistSongs[findSongIndex] = dateAdded;
-            const selectedSongs = selectedPlaylist && { ...selectedPlaylist, playlistSongs: selectedPlaylistSongs };
-            const findPlaylistIndex = playlists.findIndex((value) => value.id === selectedSongs.id);
-            if (findPlaylistIndex !== -1) {
-                playlists[findPlaylistIndex] = selectedSongs;
-                dispatch(updatePlaylists(playlists))
-            }
-            dispatch(getPlaylistSucess(selectedSongs));
         }
+        const selectedSongs = selectedPlaylist && { ...selectedPlaylist, playlistSongs: selectedPlaylistSongs };
+        const findPlaylistIndex = playlists.findIndex((value) => value.id === selectedSongs.id);
+        if (findPlaylistIndex !== -1) {
+            playlists[findPlaylistIndex] = selectedSongs;
+            dispatch(updatePlaylists(playlists))
+        }
+        dispatch(getPlaylistSucess(selectedSongs));
     }
 }
 
