@@ -6,7 +6,7 @@ Music App is basic music UI/UX demo App.
 
 ## Deployed Site
 
-**Continuous Integration** - [![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://tune-in.netlify.app/) - "_build passing_"
+**Continuous Integration** - [![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://tune-in.netlify.app/)
 
 ## Installation
 
