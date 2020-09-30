@@ -5,7 +5,8 @@ import Header from "../Header/header-component";
 const AppLayout = ({ children }) => {
   return (
     <Container className="app__layout">
-      <Header>{children}</Header>
+      <Header />
+      {children}
     </Container>
   );
 };
