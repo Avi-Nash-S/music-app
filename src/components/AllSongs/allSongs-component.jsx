@@ -18,12 +18,12 @@ const AllSongs = ({ songs, getSongs }) => {
       setHasMore(false);
       return;
     }
-    // Mock Loading...
-    setTimeout(() => {
-      setCurrent(
-        current.concat(allSongs.slice(count.prev + 100, count.next + 100))
-      );
-    }, 1000);
+
+
+    setCurrent(
+      current.concat(allSongs.slice(count.prev + 100, count.next + 100))
+    );
+
     setCount((prevState) => ({
       prev: prevState.prev + 100,
       next: prevState.next + 100,
@@ -48,6 +48,7 @@ const AllSongs = ({ songs, getSongs }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allSongs]);
 
+  // Filter songs on search query
   const filterSongs = (value) => {
     const query = value ? value.toLowerCase() : "";
     const filteredSongs = songs.filter((song) => {
